@@ -1,0 +1,35 @@
+package repositorio;
+
+import dominio.Paciente;
+
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PacienteRepositorio {
+    private final String arquivo;
+
+    public PacienteRepositorio(String arquivo) {
+        this.arquivo = arquivo;
+    }
+
+    public List<Paciente> listarTodos() throws IOException {
+        List<Paciente> pacientes = new ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(arquivo))) {
+            String linha;
+            while ((linha = br.readLine()) != null) {
+                pacientes.add(Paciente.fromString(linha));
+            }
+        }
+        return pacientes;
+    }
+
+    public void salvarTodos(List<Paciente> pacientes) throws IOException {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(arquivo))) {
+            for (Paciente paciente : pacientes) {
+                bw.write(paciente.toString());
+                bw.newLine();
+            }
+        }
+    }
+}
