@@ -1,0 +1,73 @@
+package aplicacao;
+
+import dominio.Paciente;
+import repositorio.PacienteRepositorio;
+import servico.PacienteServico;
+
+import java.io.IOException;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        String arquivo = "pacientes.txt";
+        PacienteRepositorio repositorio = new PacienteRepositorio(arquivo);
+        PacienteServico servico = new PacienteServico(repositorio);
+
+        try {
+            int opcao;
+            do {
+                System.out.println("1. Incluir Paciente");
+                System.out.println("2. Alterar Paciente");
+                System.out.println("3. Excluir Paciente");
+                System.out.println("4. Listar Pacientes");
+                System.out.println("0. Sair");
+                System.out.print("Escolha uma opção: ");
+                opcao = scanner.nextInt();
+
+                switch (opcao) {
+                    case 1:
+                        System.out.print("Número: ");
+                        int numero = scanner.nextInt();
+                        System.out.print("Peso: ");
+                        double peso = scanner.nextDouble();
+                        System.out.print("Altura: ");
+                        double altura = scanner.nextDouble();
+                        servico.incluirPaciente(new Paciente(numero, peso, altura));
+                        break;
+
+                    case 2:
+                        System.out.print("Número: ");
+                        numero = scanner.nextInt();
+                        System.out.print("Peso: ");
+                        peso = scanner.nextDouble();
+                        System.out.print("Altura: ");
+                        altura = scanner.nextDouble();
+                        servico.alterarPaciente(numero, peso, altura);
+                        break;
+
+                    case 3:
+                        System.out.print("Número: ");
+                        numero = scanner.nextInt();
+                        servico.excluirPaciente(numero);
+                        break;
+
+                    case 4:
+                        servico.listarPacientes();
+                        break;
+
+                    case 0:
+                        System.out.println("Saindo...");
+                        break;
+
+                    default:
+                        System.out.println("Opção inválida!");
+                }
+            } while (opcao != 0);
+        } catch (IOException e) {
+            System.err.println("Erro ao acessar o arquivo: " + e.getMessage());
+        } finally {
+            scanner.close();
+        }
+    }
+}
