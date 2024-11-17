@@ -1,0 +1,45 @@
+package servico;
+
+import dominio.Paciente;
+import repositorio.PacienteRepositorio;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+public class PacienteServico {
+    private final PacienteRepositorio repositorio;
+
+    public PacienteServico(PacienteRepositorio repositorio) {
+        this.repositorio = repositorio;
+    }
+
+    public void incluirPaciente(Paciente paciente) throws IOException {
+        List<Paciente> pacientes = repositorio.listarTodos();
+        pacientes.add(paciente);
+        repositorio.salvarTodos(pacientes);
+    }
+
+    public void alterarPaciente(int numero, double peso, double altura) throws IOException {
+        List<Paciente> pacientes = repositorio.listarTodos();
+        for (Paciente paciente : pacientes) {
+            if (paciente.getNumero() == numero) {
+                paciente.setPeso(peso);
+                paciente.setAltura(altura);
+                break;
+            }
+        }
+        repositorio.salvarTodos(pacientes);
+    }
+
+    public void excluirPaciente(int numero) throws IOException {
+        List<Paciente> pacientes = repositorio.listarTodos();
+        pacientes.removeIf(paciente -> paciente.getNumero() == numero);
+        repositorio.salvarTodos(pacientes);
+    }
+
+    public void listarPacientes() throws IOException {
+        List<Paciente> pacientes = repositorio.listarTodos();
+        pacientes.forEach(Paciente::listarPaciente);
+    }
+}
